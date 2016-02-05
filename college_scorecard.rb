@@ -11,11 +11,13 @@ if ARGV.first == "by_state"
   end.map{|row| row[:instnm]}
 
 elsif ARGV.first == "top_average_faculty_salary"
-  result_number = value.to_i - 1
+  result_number = value.to_i
   results =
-  file.sort_by do |row|
-    row[:avgfacsal]
-  end.map{|row| row[:instnm]}[0..(result_number)]
+  file.select do |row|
+    row[:avgfacsal] != "NULL"
+  end .sort_by { |row| row[:avgfacsal].to_i }
+      .map { |row| row[:instnm] }[-result_number..-1]
+      .reverse
 
 elsif ARGV.first == "median_debt_between"
   results =
